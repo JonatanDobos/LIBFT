@@ -1,32 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   ft_array_append.c                                  :+:    :+:            */
+/*   ft_memswap.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: joni <joni@student.codam.nl>                 +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2024/12/03 14:36:08 by joni          #+#    #+#                 */
-/*   Updated: 2024/12/03 14:36:10 by joni          ########   odam.nl         */
+/*   Created: 2024/12/03 14:50:46 by joni          #+#    #+#                 */
+/*   Updated: 2024/12/03 14:59:44 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-char	**ft_array_append(char **array, char *add)
+int	ft_memswap(void *a, void *b, size_t size)
 {
-	char	**new;
-	size_t	size;
+	unsigned char	*temp;
 
-	size = 0;
-	while (array && array[size])
-		++size;
-	new = (char **)malloc(sizeof(char *) * (size + 1 + 1));
-	if (new == NULL)
-		return (NULL);
-	new[size] = add;
-	new[size + 1] = NULL;
-	while (size--)
-		new[size] = array[size];
-	free(array);
-	return (new);
+	temp = (unsigned char *)malloc(size);
+	if (temp == NULL)
+		return (FAILURE);
+	ft_memcpy(temp, a, size);
+	ft_memcpy(a, b, size);
+	ft_memcpy(b, temp, size);
+	free(temp);
+	return (SUCCESS);
 }

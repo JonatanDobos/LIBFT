@@ -14,8 +14,8 @@ SRC		=	$(SRCDIR)/ft_abs.c \
 			$(SRCDIR)/ft_bzero.c \
 			$(SRCDIR)/ft_calloc.c \
 			$(SRCDIR)/ft_cpy.c \
-			$(SRCDIR)/ft_free_null.c \
 			$(SRCDIR)/ft_free_array.c \
+			$(SRCDIR)/ft_free.c \
 			$(SRCDIR)/ft_intlen_base.c \
 			$(SRCDIR)/ft_intlen.c \
 			$(SRCDIR)/ft_isalnum.c \
@@ -42,7 +42,7 @@ SRC		=	$(SRCDIR)/ft_abs.c \
 			$(SRCDIR)/ft_memcpy.c \
 			$(SRCDIR)/ft_memmove.c \
 			$(SRCDIR)/ft_memset.c \
-			$(SRCDIR)/ft_printf.c \
+			$(SRCDIR)/ft_memswap.c \
 			$(SRCDIR)/ft_putarray.c \
 			$(SRCDIR)/ft_putchar_fd.c \
 			$(SRCDIR)/ft_putchar.c \
@@ -78,7 +78,6 @@ SRC		=	$(SRCDIR)/ft_abs.c \
 			$(SRCDIR)/ft_strtrim.c \
 			$(SRCDIR)/ft_substr.c \
 			$(SRCDIR)/ft_swap_ints.c \
-			$(SRCDIR)/ft_swap.c \
 			$(SRCDIR)/ft_tolower.c \
 			$(SRCDIR)/ft_toupper.c \
 			$(SRCDIR)/ft_writing.c \

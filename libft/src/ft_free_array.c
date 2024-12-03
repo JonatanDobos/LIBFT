@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_free_array.c                                :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: svan-hoo <svan-hoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 19:56:43 by svan-hoo          #+#    #+#             */
-/*   Updated: 2024/06/27 21:13:44 by svan-hoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   ft_free_array.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: joni <joni@student.codam.nl>                 +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/03 14:37:34 by joni          #+#    #+#                 */
+/*   Updated: 2024/12/03 14:38:07 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
 // free all pointers in array, then array itself. Array must be NULL-terminated.
-void
-	ft_free_array(
-		char **array)
+void	ft_free_array(char **array)
 {
 	int	i;
 

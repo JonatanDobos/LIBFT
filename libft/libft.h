@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: svan-hoo <svan-hoo@student.codam.nl>       +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/03 16:53:50 by svan-hoo          #+#    #+#             */
-/*   Updated: 2024/10/31 16:50:56 by svan-hoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   libft.h                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: svan-hoo <svan-hoo@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/10/03 16:53:50 by svan-hoo      #+#    #+#                 */
+/*   Updated: 2024/12/03 15:15:42 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ char		*ft_strjoin(const char *s1, const char *s2);
 char		*ft_substr(const char *str, unsigned int start, size_t len);
 char		*ft_strmapi(const char *str, char (*f)(unsigned int, char));
 
-void		*ft_free_null(char **pp);
+void		ft_free(char **ptr);
 void		ft_free_array(char **array);
 char		**ft_realloc_array(char **array, size_t size);
 

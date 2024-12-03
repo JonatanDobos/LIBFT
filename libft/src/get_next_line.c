@@ -1,117 +1,90 @@
 /* ************************************************************************** */
 /*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: svan-hoo <svan-hoo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/24 18:11:14 by svan-hoo          #+#    #+#             */
-/*   Updated: 2024/11/22 20:47:49 by svan-hoo         ###   ########.fr       */
+/*                                                        ::::::::            */
+/*   get_next_line.c                                    :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: joni <joni@student.codam.nl>                 +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2024/12/03 15:14:17 by joni          #+#    #+#                 */
+/*   Updated: 2024/12/03 15:14:36 by joni          ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-static char	*ft_strdup_gnl(const char *buffer)
+static size_t	nl_len(char *str)
 {
-	int		i;
-	char	*temptr;
-
-	i = ft_strchr_null(buffer, '\n');
-	if (i == 0)
-		i = ft_strlen_null(buffer);
-	temptr = (char *)malloc((i + 1) * sizeof(char));
-	if (temptr == NULL)
-		return (NULL);
-	temptr[i] = '\0';
-	while (i--)
-		temptr[i] = buffer[i];
-	return (temptr);
-}
-
-static char	*ft_strjoin_gnl(char **nextline, const char *buffer)
-{
-	char		*temptr;
-	const int	n_len = ft_strlen_null(*nextline);
-	const int	b_len = ft_strlen_null(buffer);
-	const int	b_nl = ft_strchr_null(buffer, '\n');
-	int			i;
-
-	if (b_nl == 0)
-		i = n_len + b_len;
-	else
-		i = n_len + b_nl;
-	temptr = (char *)malloc((i + 1) * sizeof(char));
-	if (temptr == NULL)
-		return (ft_free_null(nextline));
-	temptr[i] = '\0';
-	while (i-- > n_len)
-		temptr[i] = buffer[i - n_len];
-	i += 1;
-	while (i--)
-	{
-		temptr[i] = (*nextline)[i];
-	}
-	ft_free_null(nextline);
-	return (temptr);
-}
-
-static char	*ft_read_gnl(char **nextline, char *buffer, int fd)
-{
-	int		bytes_read;
-
-	bytes_read = GNL_BUFFER_SIZE;
-	while (bytes_read == GNL_BUFFER_SIZE && !ft_strchr_null(buffer, '\n'))
-	{
-		bytes_read = read(fd, buffer, GNL_BUFFER_SIZE);
-		if (bytes_read < 0)
-			return (ft_free_null(nextline));
-		buffer[bytes_read] = '\0';
-		*nextline = ft_strjoin_gnl(nextline, buffer);
-		if (*nextline == NULL)
-			return (NULL);
-	}
-	return (*nextline);
-}
-
-static void	ft_remainder_gnl(char *buffer)
-{
-	const char	*remainder = buffer + ft_strchr_null(buffer, '\n');
-	int			i;
+	size_t	i;
 
 	i = 0;
-	if (remainder > buffer)
+	if (str)
 	{
-		while (remainder[i])
-		{
-			buffer[i] = remainder[i];
+		while (str[i] && (i == 0 || str[i - 1] != '\n'))
 			i++;
-		}
+		return (i);
 	}
-	ft_memclear(buffer + i, GNL_BUFFER_SIZE - i);
+	return (0);
 }
 
+static size_t	nl_check(char *str)
+{
+	while (str && *str)
+	{
+		if (*str == '\n')
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+static char	*get_buf(char *buf, char *line, size_t i, size_t j)
+{
+	const size_t	l_len = nl_len(line);
+	const size_t	b_len = nl_len(buf);
+	char			*new_line;
+	char			*temp_line;
+
+	if (b_len == 0)
+		return (line);
+	temp_line = line;
+	new_line = (char *)malloc(l_len + b_len + 1);
+	if (!new_line)
+		return (ft_free(&line), NULL);
+	while (i < l_len)
+		new_line[i++] = *(temp_line++);
+	while (j < b_len)
+		new_line[i++] = buf[j++];
+	new_line[i] = '\0';
+	ft_free(&line);
+	i = 0;
+	while (buf[j])
+		buf[i++] = buf[j++];
+	buf[i] = '\0';
+	return (new_line);
+}
+
+// Modified: returns "\0" on EOF instead of NULL
 char	*get_next_line(int fd)
 {
 	static char	buffer[GNL_BUFFER_SIZE + 1];
-	char		*nextline;
+	ssize_t		bytesread;
+	char		*line;
 
-	if (GNL_BUFFER_SIZE <= 0 || fd < 0)
+	line = (char *)malloc(sizeof(char));
+	if (!line)
 		return (NULL);
-	nextline = ft_strdup_gnl(buffer);
-	if (nextline == NULL)
+	line[0] = '\0';
+	line = get_buf(buffer, line, 0, 0);
+	if (nl_check(line) != 0 || line == NULL)
+		return (line);
+	bytesread = GNL_BUFFER_SIZE;
+	while (line && nl_check(line) == 0 && bytesread == GNL_BUFFER_SIZE)
 	{
-		ft_memclear(buffer, GNL_BUFFER_SIZE + 1);
-		return (NULL);
+		bytesread = read(fd, buffer, GNL_BUFFER_SIZE);
+		if (bytesread < 0)
+			return (ft_free(&line), NULL);
+		buffer[bytesread] = '\0';
+		line = get_buf(buffer, line, 0, 0);
 	}
-	nextline = ft_read_gnl(&nextline, buffer, fd);
-	if (nextline == NULL)
-	{
-		ft_memclear(buffer, GNL_BUFFER_SIZE + 1);
-		return (NULL);
-	}
-	ft_remainder_gnl(buffer);
-	if (nextline[0] == 0)
-		return (ft_free_null(&nextline));
-	return (nextline);
+	return (line);
 }
